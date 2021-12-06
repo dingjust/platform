@@ -21,7 +21,9 @@
       </el-table-column>
       <el-table-column label="支付类型" >
         <template slot-scope="scope">
-          <span>{{scope.row.orderType === 'offline' ? '线下支付' : '线上支付'}}</span>
+          <el-tag v-if="scope.row.orderType === 'offline'" >线下支付</el-tag>
+          <el-tag v-else type="success">线上支付</el-tag>
+          <!-- <span>{{scope.row.orderType === 'offline' ? '线下支付' : '线上支付'}}</span> -->
         </template>
       </el-table-column>
     </el-table>

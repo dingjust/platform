@@ -16,6 +16,12 @@ export function accMul (arg1, arg2) {
 
 export function accAdd (arg1, arg2) {
   var r1, r2, m, c;
+  if(!arg1){
+    arg1=0;
+  }
+  if(!arg2){
+    arg2=0;
+  }
   try {
     r1 = arg1.toString().split('.')[1].length;
   } catch (e) {

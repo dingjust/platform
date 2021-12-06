@@ -7,7 +7,7 @@
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="datePicker"
-          value-format="timestamp"
+          value-format="yyyy-MM-dd"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -49,11 +49,11 @@ export default {
   watch: {
     datePicker: function (nval, oval) {
       if (nval) {
-        this.queryFormData.createdDateFrom = nval[0]
-        this.queryFormData.createdDateTo = nval[1]
+        this.queryFormData.creationtimeFrom = nval[0]
+        this.queryFormData.creationtimeTo = nval[1]
       } else {
-        this.queryFormData.createdDateFrom = null
-        this.queryFormData.createdDateTo = null
+        this.queryFormData.creationtimeFrom = ''
+        this.queryFormData.creationtimeTo = ''
       }
     }
   }

@@ -60,6 +60,7 @@
 
         orders.forEach(order => {
           let date = formatDate(new Date(order.paySuccessTime), 'yyyy-MM-dd');
+          this.testMap[date]
           if (dataMap[date]) {
             dataMap[date] = accAdd(dataMap[date], order.totalAmount);
           } else {
@@ -96,8 +97,8 @@
       async getOrders() {
         const url = this.apis().searchPaymentOrder();
         const result = await this.$http.post(url, {
-          createdDateFrom: this.startDate,
-          createdDateTo: this.endDate,
+          creationtimeFrom: formatDate(new Date(this.startDate), 'yyyy-MM-dd'),
+          creationtimeTo: formatDate(new Date(this.endDate), 'yyyy-MM-dd'),
           state: 'PAID'
         }, {
           size: 999
@@ -116,7 +117,8 @@
         chart: null,
         data: null,
         startDate: null,
-        endDate: null
+        endDate: null,
+        testMap:{}
       };
     },
     watch: {},

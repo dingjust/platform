@@ -31,13 +31,14 @@
                                       @callback="callback" @onDetail="onTaskDetail"/>
       </el-tab-pane>
       <el-tab-pane label="盈亏分析" v-if="showProfitLoss" key="profitLoss" :lazy="true">
-        <profit-loss-detail-subject v-if="form.profitLossAnalysis" 
+        <profit-loss-detail-subject v-if="form.profitLossAnalysis"
                                     :id="form.profitLossAnalysis.id" @callback="callback"/>
         <el-row v-else type="flex" justify="center" align="middle" style="padding: 20px;">
           <h6 style="color: #909399">暂无数据</h6>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="支付信息" key="payment" v-if="form.paymentOrders && form.paymentOrders.length > 0">
+      <!-- <el-tab-pane label="支付信息" key="payment" v-if="form.paymentOrders && form.paymentOrders.length > 0"> -->
+      <el-tab-pane label="支付信息" key="payment" >
         <sales-payment :formData="form" :fromOut="fromOut" @callback="callback"/>
       </el-tab-pane>
       <el-tab-pane label="对账信息" key="reconciliation" v-if="form.reconciliationSheetList && form.reconciliationSheetList.length > 0">
@@ -192,13 +193,13 @@
         const result = await this.$http.post(url, row);
         if (result.code === 0) {
           this.$message.error(result.msg);
-          return; 
+          return;
         }
         this.$emit('getDetails');
         this.formVisible = false;
       },
       onTaskDetail(index){
-        
+
       },
       createProfitLoss () {
         this.$router.push({
