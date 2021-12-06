@@ -26,7 +26,7 @@ export default {
   props: ['queryFormData'],
   methods: {
     onAdvancedSearch () {
-      this.$emit('onAdvancedSearch');
+      this.$emit('onAdvancedSearch', 0);
     },
     onReset () {
       this.queryFormData.keyword = '';
