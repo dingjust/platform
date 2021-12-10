@@ -7,75 +7,105 @@
     </el-row>
     <el-form ref="form" :model="form" :inline="true">
       <el-form-item label="交易编号" prop="outOrderNo" :rules="[{ required: true, message: '请填写交易编号', trigger: 'blur' }]">
-        <el-input v-model="form.outOrderNo" ></el-input>
+        <el-input v-model="form.outOrderNo"></el-input>
       </el-form-item>
+      <el-button type="text" @click="generateCode">没有编号点我</el-button>
       <el-form-item label="支付金额" prop="payAmount" :rules="[{ required: true, message: '请填写支付金额', trigger: 'blur' }]">
-        <el-input v-model="form.payAmount" ></el-input>
+        <el-input v-model="form.payAmount"></el-input>
       </el-form-item>
       <el-form-item label="支付方式" prop="payType" :rules="[{ required: true, message: '请填写支付金额', trigger: 'blur' }]">
-        <el-select v-model="form.payType" >
+        <el-select v-model="form.payType">
           <el-option v-for="item in PayMethod" :key="item.code" :label="item.name" :value="item.code"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="支付时间" prop="paySuccessTime" :rules="[{ required: true, message: '请填写支付时间', trigger: 'blur' }]">
+      <el-form-item label="支付时间" prop="paySuccessTime"
+        :rules="[{ required: true, message: '请填写支付时间', trigger: 'blur' }]">
         <el-date-picker v-model="form.paySuccessTime" type="datetime" value-format="timestamp"></el-date-picker>
       </el-form-item>
+      <el-row>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" style="width:300px" :placeholder="placeholder"></el-input>
+        </el-form-item>
+      </el-row>
     </el-form>
     <el-row type="flex" justify="end">
-      <el-button type="default" @click="onCancel" >取消</el-button>
-      <el-button type="primary" @click="onSure" >确认导入</el-button>
+      <el-button type="default" @click="onCancel">取消</el-button>
+      <el-button type="primary" @click="onSure">确认导入</el-button>
     </el-row>
   </div>
 </template>
 
 <script>
-export default {
-  name: "PaymentOrderForm",
-  props: ['formData', 'handleForm'],
-  methods: {
-    onSure () {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.$confirm('是否提交数据?', '提示', {
-            confirmButtonText: '是',
-            cancelButtonText: '否',
-            type: 'warning'
-          }).then(() => {
-            this._onSure()
-          });
-        } else {
-          this.$message.error('请先完善表单')
-        }
-      })
-    },
-    async _onSure () {
-      const form = this.form
-      form.originCode = form.originCode ? form.originCode : this.formData.code
+  import {
+    formatDate
+  } from '@/common/js/filters';
 
-      this.$emit('onSure', form)
+  export default {
+    name: "PaymentOrderForm",
+    props: ['formData', 'handleForm'],
+    computed: {
+      placeholder: function () {
+        if (this.form.payType == 'E_BANK') {
+          return '姓名、银行信息...';
+        } else {
+          return '请输入相关备注';
+        }
+      }
     },
-    onCancel () {
-      this.$emit('closeDialog')
-    }
-  },
-  data() {
-    return {
-      form: {
-        outOrderNo: '',
-        payAmount: '',
-        originCode: '',
-        payType: 'WECHAT_PAY_QRCODE',
-        paySuccessTime: new Date().getTime()
+    methods: {
+      onSure() {
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            this.$confirm('是否提交数据?', '提示', {
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              type: 'warning'
+            }).then(() => {
+              this._onSure()
+            });
+          } else {
+            this.$message.error('请先完善表单')
+          }
+        })
       },
-      PayMethod: this.$store.state.EnumsModule.PayMethod
-    };
-  },
-  created () {
-    if (this.handleForm) {
-      this.form = this.handleForm
+      async _onSure() {
+        const form = this.form
+        form.originCode = form.originCode ? form.originCode : this.formData.code
+
+        this.$emit('onSure', form)
+      },
+      onCancel() {
+        this.$emit('closeDialog')
+      },
+      generateCode() {
+        if (this.form.paySuccessTime == null || this.form.paySuccessTime == '') {
+          this.$message.error('请先设置支付时间');
+          return
+        }else{
+          this.form.outOrderNo='PMO'+this.formData.code+'-'+formatDate(new Date(this.form.paySuccessTime), 'yyyyMMddhhmmss');
+        }
+      }
+    },
+    data() {
+      return {
+        form: {
+          outOrderNo: '',
+          payAmount: '',
+          originCode: '',
+          payType: 'WECHAT_PAY_QRCODE',
+          paySuccessTime: new Date().getTime(),
+          remark: ''
+        },
+        PayMethod: this.$store.state.EnumsModule.PayMethod
+      };
+    },
+    created() {
+      if (this.handleForm) {
+        this.form = this.handleForm
+      }
     }
-  }
-};
+  };
+
 </script>
 
 <style scoped>

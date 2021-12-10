@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_enterprise_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
@@ -31,73 +32,10 @@ class _MyAuthenticationState extends State<MyAuthentication> {
     super.initState();
   }
 
-  Widget setAuthenticationStateText(AuthenticationModel model) {
-    if (model.companyState == AuthenticationState.UNCERTIFIED)
-      return Text(
-        '未认证',
-        style: TextStyle(
-          color: Colors.grey,
-        ),
-      );
-    if (model.companyState == AuthenticationState.CHECK)
-      return Text(
-        '认证中',
-        style: TextStyle(
-          color: Color.fromRGBO(255, 214, 12, 1),
-        ),
-      );
-    if (model.companyState == AuthenticationState.SUCCESS)
-      return Text(
-        '认证通过',
-        style: TextStyle(color: Colors.green),
-      );
-    if (model.companyState == AuthenticationState.FAILED ||
-        model.companyState == AuthenticationState.FAIL)
-      return Text(
-        '认证失败',
-        style: TextStyle(
-          color: Color.fromRGBO(255, 214, 12, 1),
-        ),
-      );
-
-    return Container();
-  }
-
-  Widget setPersonalAuthenticationStateText(AuthenticationModel model) {
-    if (model.personalState == AuthenticationState.UNCERTIFIED)
-      return Text(
-        '未认证',
-        style: TextStyle(
-          color: Colors.grey,
-        ),
-      );
-    if (model.personalState == AuthenticationState.CHECK)
-      return Text(
-        '认证中',
-        style: TextStyle(
-          color: Color.fromRGBO(255, 214, 12, 1),
-        ),
-      );
-    if (model.personalState == AuthenticationState.SUCCESS)
-      return Text(
-        '认证通过',
-        style: TextStyle(
-          color: Colors.green,
-        ),
-      );
-    if (model.personalState == AuthenticationState.FAILED)
-      return Text(
-        '认证失败',
-        style: TextStyle(
-          color: Color.fromRGBO(255, 214, 12, 1),
-        ),
-      );
-  }
-
   Future<CertificationState> _getData() async {
     // 查询明细
     CertificationState model =
-        await ContractRepository().getAuthenticationState();
+    await ContractRepository().getAuthenticationState();
     AuthenticationModel authenticationModel = model.data;
 
     if (authenticationModel.companyType != null &&
@@ -110,32 +48,30 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('我要认证'),
-        centerTitle: true,
-        elevation: 0.5,
-      ),
-      body: FutureBuilder<CertificationState>(
-        builder:
-            (BuildContext context, AsyncSnapshot<CertificationState> snapshot) {
-          if (snapshot.data != null) {
-            return Column(
-              children: <Widget>[
-                _buildEnterpriseItem(snapshot.data.data),
-                // _buildIndividualBusinessItem(snapshot.data.data),
-                _buildPersonalItem(snapshot.data.data),
-                _buildInfo1(),
-                _buildInfo2(),
-              ],
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-        initialData: null,
-        future: _getData(),
+      appBar: AppBarFactory.buildDefaultAppBar('我要认证'),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(color: Color(0xFFF7F7F7)),
+        child: FutureBuilder<CertificationState>(
+          builder: (BuildContext context,
+              AsyncSnapshot<CertificationState> snapshot) {
+            if (snapshot.data != null) {
+              return Column(
+                children: <Widget>[
+                  _buildEnterpriseItem(snapshot.data.data),
+                  // _buildIndividualBusinessItem(snapshot.data.data),
+                  _buildPersonalItem(snapshot.data.data),
+                ],
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+          initialData: null,
+          future: _getData(),
+        ),
       ),
     );
   }
@@ -144,135 +80,104 @@ class _MyAuthenticationState extends State<MyAuthentication> {
     return GestureDetector(
       onTap: () => _onEnterprise(model),
       child: Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(top: 5),
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(right: 10),
-              child: Text(
-                '企业认证',
-                style: TextStyle(
-                    fontSize: 20,
-                    // color: model.companyState == AuthenticationState.UNCERTIFIED
-                    //     ? Colors.black
-                    //     : Colors.grey),
-                    color: (model.companyState ==
-                                    AuthenticationState.UNCERTIFIED &&
-                                model.personalState ==
-                                    AuthenticationState.UNCERTIFIED) ||
-                            (_isCompany &&
-                                (model.companyState ==
-                                        AuthenticationState.CHECK ||
-                                    model.companyState ==
-                                        AuthenticationState.SUCCESS))
-                        ? Colors.black
-                        : Colors.grey),
-              ),
-            ),
-            Expanded(
-              child: _isCompany || model.companyType == null
-                  ? setAuthenticationStateText(model)
-                  : Container(),
-              flex: 2,
-            ),
-            Container(
-              child: Text(
-                '企业四要素认证',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            Container(
-              child: Icon(
-                Icons.keyboard_arrow_right,
-                size: 28,
-              ),
-            ),
-          ],
-        ),
-      ),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          margin: EdgeInsets.only(top: 12),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: Column(
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        Text(
+                          '企业认证',
+                          style:
+                              TextStyle(color: Color(0xFFAA6E15), fontSize: 16),
+                        ),
+                        _Tag(
+                          state: model.companyState,
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                      child: Row(
+                    children: [
+                      Expanded(
+                          child: Text(
+                        '申请企业认证后，不可以再申请个人认证',
+                        style:
+                            TextStyle(color: Color(0xFF666666), fontSize: 12),
+                      ))
+                    ],
+                  ))
+                ],
+              )),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(
+                    Icons.chevron_right,
+                    color: Color(0xFF999999),
+                  ))
+            ],
+          )),
     );
   }
 
   Widget _buildPersonalItem(AuthenticationModel model) {
-    final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
-
     return GestureDetector(
       onTap: () => _onPersonal(model),
       child: Container(
-        color: Colors.white,
-        margin: EdgeInsets.only(top: 5),
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: Text(
-                '个人认证',
-                style: TextStyle(
-                    fontSize: 20,
-                    color: (model.companyState ==
-                        AuthenticationState.UNCERTIFIED &&
-                        model.personalState ==
-                            AuthenticationState.UNCERTIFIED) ||
-                        model.personalState == AuthenticationState.CHECK ||
-                        model.personalState == AuthenticationState.SUCCESS
-                        ? Colors.black
-                        : Colors.grey),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: model.companyState == AuthenticationState.UNCERTIFIED
-                    ? setPersonalAuthenticationStateText(model)
-                    : Container(),
-              ),
-              flex: 2,
-            ),
-            Container(
-              child: Text(
-                '个人三要素认证',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            Container(
-              child: Icon(Icons.keyboard_arrow_right,
-                  size: 28,
-                  color: widget.company.approvalStatus == null
-                      ? Colors.black
-                      : Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfo1() {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      padding: EdgeInsets.symmetric(horizontal: 40),
-      child: Row(
-        children: <Widget>[Expanded(child: Text('1.申请个人实名认证后还可以申请企业认证'))],
-      ),
-    );
-  }
-
-  Widget _buildInfo2() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 40),
-      child: Row(
-        children: <Widget>[Expanded(child: Text('2.申请企业认证后不可以再申请个人认证'))],
-      ),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          margin: EdgeInsets.only(top: 12),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            Text(
+                              '个人认证',
+                              style:
+                              TextStyle(color: Color(0xFFAA6E15), fontSize: 16),
+                            ),
+                            _Tag(
+                              state: model.personalState,
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: Text(
+                                    '申请个人实名认证后，还可以申请企业认证',
+                                    style:
+                                    TextStyle(
+                                        color: Color(0xFF666666), fontSize: 12),
+                                  ))
+                            ],
+                          ))
+                    ],
+                  )),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(
+                    Icons.chevron_right,
+                    color: Color(0xFF999999),
+                  ))
+            ],
+          )),
     );
   }
 
@@ -516,3 +421,39 @@ class _MyAuthenticationState extends State<MyAuthentication> {
         });
   }
 }
+
+class _Tag extends StatelessWidget {
+  final AuthenticationState state;
+
+  const _Tag({Key key, this.state}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (state == null || (!AuthenticationState.values.contains(state))) {
+      return Container();
+    }
+
+    return Container(
+        margin: EdgeInsets.only(left: 8),
+        decoration: BoxDecoration(
+            color: _AuthenticationStateColorMap[state],
+            borderRadius: BorderRadius.circular(8)),
+        padding: EdgeInsets.fromLTRB(9, 0, 9, 2),
+        child: Text(
+          '${AuthenticationStateLocalizedMap[state]}',
+          style: TextStyle(
+              fontSize: 10,
+              color: state == AuthenticationState.UNCERTIFIED
+                  ? Color(0xFF222222)
+                  : Colors.white),
+        ));
+  }
+}
+
+const _AuthenticationStateColorMap = {
+  AuthenticationState.UNCERTIFIED: Color(0xFFD8D8D8),
+  AuthenticationState.CHECK: Color.fromRGBO(255, 214, 12, 1),
+  AuthenticationState.SUCCESS: Colors.green,
+  AuthenticationState.FAILED: Color(0xFFFF4D4F),
+  AuthenticationState.FAIL: Color(0xFFFF4D4F),
+};

@@ -258,7 +258,7 @@ class AppCopyright extends StatelessWidget {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Center(
-            child: Text('© 2019-2020 宁波衣加衣供应链管理有限公司 版权所有',
+            child: Text('© 2019-2021 宁波衣加衣供应链管理有限公司 版权所有',
                 style: TextStyle(color: Colors.grey, fontSize: 12))));
   }
 }
