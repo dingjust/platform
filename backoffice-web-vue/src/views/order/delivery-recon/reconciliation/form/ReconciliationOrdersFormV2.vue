@@ -95,7 +95,7 @@ export default {
       this.$refs.form.validateField(name);
     },
     onCreate () {
-      if (this.$refs.uploadPart.$refs.imageUpload.isUploading() || 
+      if (this.$refs.uploadPart.$refs.imageUpload.isUploading() ||
           this.$refs.uploadPart.$refs.filesUpload.isUploading()) {
         this.$message.warning('文件正在上传，请稍等...');
         return;
@@ -103,10 +103,10 @@ export default {
 
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (!this.isAllApproval && this.formData.paperSheetMedias.length <= 0) {
-            this.$message.error('合作商双方有其中一方未认证时，需上传已签署的对账单');
-            return;
-          }
+          // if (!this.isAllApproval && this.formData.paperSheetMedias.length <= 0) {
+          //   this.$message.error('合作商双方有其中一方未认证时，需上传已签署的对账单');
+          //   return;
+          // }
 
           if (this.isAllApproval && this.formData.entries.length <= 0 && this.formData.paperSheetMedias.length <= 0) {
             this.$message.error('请填写对账信息！');
@@ -134,7 +134,7 @@ export default {
       let data = JSON.parse(JSON.stringify(this.formData));
 
       this.$delete(data, 'type');
-      
+
       // 人员设置数据处理
       if (!this.formData.isApproval) {
         data.approvers = [];
@@ -154,7 +154,7 @@ export default {
         item.customColumns = [];
         data.colNames.forEach(val => {
           item.customColumns.push({
-            id: item[val.id].id !== '' ? item[val.id].id : null, 
+            id: item[val.id].id !== '' ? item[val.id].id : null,
             name: val.value,
             value: item[val.id].value
           })
@@ -229,13 +229,13 @@ export default {
     if (this.$route.params.order) {
       this.formData.fastShippingSheets[0].id = this.$route.params.order.id;
       this.formData.fastShippingSheets[0].code = this.$route.params.order.code;
-      
+
       this.formData.cooperator = {
         id: this.$route.params.order.cooperator.id,
-        name: this.$route.params.order.cooperator.type === 'ONLINE' ? 
-              this.$route.params.order.cooperator.partner.name : 
+        name: this.$route.params.order.cooperator.type === 'ONLINE' ?
+              this.$route.params.order.cooperator.partner.name :
               this.$route.params.order.cooperator.name,
-        approvalStatus: this.$route.params.order.cooperator.type === 'ONLINE' ? 
+        approvalStatus: this.$route.params.order.cooperator.type === 'ONLINE' ?
               this.$route.params.order.cooperator.partner.approvalStatus : ''
       }
     }

@@ -86,7 +86,8 @@ export default {
       this.$emit('onSelect', this.selectionRow);
     },
     selectable (row, index) {
-      return row.originCompany != null;
+      return true
+      // return row.originCompany != null;
     },
     cooperatorName(row) {
       if (row.originCompany != null) {
