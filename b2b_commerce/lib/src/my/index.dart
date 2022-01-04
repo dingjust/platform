@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     ///极光初始化
-    jpush$.setContext(context);
+    // jpush$.setContext(context);
   }
 
   @override

@@ -586,7 +586,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ..password = _passwordController.text;
 
     //提交注册信息前设置推送别名
-    jpush$.setAlias(_phoneController.text);
+    // jpush$.setAlias(_phoneController.text);
 
     // 加载条
     showDialog(
@@ -613,7 +613,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ModalRoute.withName('/'),
       );
     } else {
-      jpush$.deleteAlias();
+      // jpush$.deleteAlias();
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       showDialog<void>(

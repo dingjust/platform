@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     ///极光初始化
-    jpush$.setContext(context);
+    // jpush$.setContext(context);
 
     return MultiProvider(
         providers: [

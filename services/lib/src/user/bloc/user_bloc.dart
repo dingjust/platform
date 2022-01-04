@@ -135,7 +135,7 @@ class UserBLoC extends BLoCBase {
       }
 
       //设置JPUSH别名
-      jpush$.setAlias(currentUser.mobileNumber);
+      // jpush$.setAlias(currentUser.mobileNumber);
       //友盟设置用户账号
       // UmengPlugin.onProfileSignIn(_user.mobileNumber);
 
@@ -217,7 +217,7 @@ class UserBLoC extends BLoCBase {
       }
 
       //设置JPUSH别名
-      jpush$.setAlias(currentUser.mobileNumber);
+      // jpush$.setAlias(currentUser.mobileNumber);
       //友盟设置用户账号
       // UmengPlugin.onProfileSignIn(_user.mobileNumber);
 
@@ -243,7 +243,7 @@ class UserBLoC extends BLoCBase {
     BLocBus.systemBlocReset();
 
     //JPUSH删除别名
-    jpush$.deleteAlias();
+    // jpush$.deleteAlias();
     //友盟取消用户账号
     // UmengPlugin.onProfileSignOff();
 
@@ -317,7 +317,7 @@ class UserBLoC extends BLoCBase {
           }
         }
 
-        jpush$.setAlias(currentUser.mobileNumber);
+        // jpush$.setAlias(currentUser.mobileNumber);
         //友盟设置用户账号
         // UmengPlugin.onProfileSignIn(_user.mobileNumber);
 

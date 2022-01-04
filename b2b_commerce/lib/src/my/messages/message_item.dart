@@ -30,7 +30,7 @@ class MessageItemPage extends StatelessWidget {
                     )),
           );
         } else {
-          jpush$.onOpenMessage(model, context);
+          // jpush$.onOpenMessage(model, context);
         }
       },
         onLongPress: (){

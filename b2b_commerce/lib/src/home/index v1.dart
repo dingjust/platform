@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
     ScrollController _scrollController = ScrollController();
 
     ///极光初始化
-    jpush$.setContext(context);
+    // jpush$.setContext(context);
 
     return Scaffold(
       key: homePageKey,

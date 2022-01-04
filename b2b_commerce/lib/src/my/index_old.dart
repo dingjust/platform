@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     ///极光初始化
-    jpush$.setContext(context);
+    // jpush$.setContext(context);
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[

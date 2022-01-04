@@ -140,18 +140,18 @@ class NotificationsPool {
 
   ///分析推送消息生产进度是否刷新
   void analysProductionMessage(Map<String, dynamic> message) {
-    TargetPlatform platform = defaultTargetPlatform;
-    if (platform == TargetPlatform.iOS) {
-      JPushIOSResponse response = JPushIOSResponse.fromJson(message);
-      if (PAGE_ROUTE_MAP[response.module] == 3) {
-        ProductionBLoC.instance.refreshData('');
-      }
-    } else {
-      JPushAndroidResponse response = JPushAndroidResponse.fromJson(message);
-      if (PAGE_ROUTE_MAP[response.extras.androidExtras.module] == 3) {
-        ProductionBLoC.instance.refreshData('');
-      }
-    }
+    // TargetPlatform platform = defaultTargetPlatform;
+    // if (platform == TargetPlatform.iOS) {
+    //   JPushIOSResponse response = JPushIOSResponse.fromJson(message);
+    //   if (PAGE_ROUTE_MAP[response.module] == 3) {
+    //     ProductionBLoC.instance.refreshData('');
+    //   }
+    // } else {
+    //   JPushAndroidResponse response = JPushAndroidResponse.fromJson(message);
+    //   if (PAGE_ROUTE_MAP[response.extras.androidExtras.module] == 3) {
+    //     ProductionBLoC.instance.refreshData('');
+    //   }
+    // }
   }
 
   ///获取全部通知数
