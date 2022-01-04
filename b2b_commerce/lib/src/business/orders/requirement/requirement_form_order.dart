@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
 import 'package:b2b_commerce/src/business/orders/widget/form_divider.dart';
@@ -353,7 +352,7 @@ class _RequirementFormOrderState extends State<RequirementFormOrder>
   Widget _buildLocation() {
     return FormSelectRow(
       title: '所在地区',
-      val: '${widget.formState.model.details?.address}',
+      val: '${widget.formState.model.details?.address ?? ''}',
       padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
       onTap: () async {
         Tip tip = await Navigator.of(context)

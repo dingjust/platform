@@ -653,7 +653,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
   Widget _buildLocation() {
     return FormSelectRow(
       title: '所在地区',
-      val: '${widget.formState.model.details?.address}',
+      val: '${widget.formState.model.details?.address ?? ''}',
       padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20),
       onTap: () async {
         Tip tip = await Navigator.of(context)

@@ -1,7 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_list.dart';
-import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/common/qr_scan_page.dart';
 import 'package:b2b_commerce/src/helper/app_version.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/search/home_search_bar.dart';
@@ -267,15 +265,15 @@ class HomeTitle extends StatelessWidget {
             flex: 1,
             child: leading,
           ),
-          GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => QrScanPage()));
-              },
-              child: Padding(
-                padding: EdgeInsets.only(left: 13),
-                child: B2BV2Image.top_3(width: 24, height: 24),
-              )),
+          // GestureDetector(
+          //     onTap: () {
+          //       Navigator.of(context).push(
+          //           MaterialPageRoute(builder: (context) => QrScanPage()));
+          //     },
+          //     child: Padding(
+          //       padding: EdgeInsets.only(left: 13),
+          //       child: B2BV2Image.top_3(width: 24, height: 24),
+          //     )),
         ],
       ),
     );
