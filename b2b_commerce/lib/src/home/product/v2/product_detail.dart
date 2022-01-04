@@ -36,8 +36,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     if (widget.code != null) {
       //数据埋点>>>看款详情
-      UmengPlugin.onEvent('order_product_detail_page',
-          properties: {'code': widget.code});
+      // UmengPlugin.onEvent('order_product_detail_page',
+      //     properties: {'code': widget.code});
     }
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);

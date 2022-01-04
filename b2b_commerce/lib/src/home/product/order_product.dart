@@ -58,9 +58,9 @@ class _ProductsPageState extends State<ProductsPage> {
         .addPostFrameCallback((_) => getCascadedCategories());
     productCondition = ProductCondition([], widget.keyword ?? '');
     //埋点>>>看款下单
-    UmengPlugin.onEvent('order_product_page');
-    //页面统计
-    UmengPlugin.onPageStart('看款下单');
+    // UmengPlugin.onEvent('order_product_page');
+    // //页面统计
+    // UmengPlugin.onPageStart('看款下单');
 
     super.initState();
   }
@@ -297,7 +297,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   void dispose() {
-    UmengPlugin.onPageEnd('看款下单');
+    // UmengPlugin.onPageEnd('看款下单');
     OrderByProductBLoc.instance.clear();
 
     super.dispose();

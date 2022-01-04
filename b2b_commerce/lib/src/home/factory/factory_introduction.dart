@@ -39,7 +39,7 @@ class _FactoryIntroductionPageState extends State<FactoryIntroductionPage>
   void initState() {
     super.initState();
     if (UserBLoC.instance.currentUser.companyCode != widget.uid) {
-      UmengPlugin.onEvent('factory_detail', properties: {'uid': widget.uid});
+      // UmengPlugin.onEvent('factory_detail', properties: {'uid': widget.uid});
     }
     _tabController = TabController(length: 3, vsync: this);
   }

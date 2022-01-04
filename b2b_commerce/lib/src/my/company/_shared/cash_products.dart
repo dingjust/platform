@@ -112,10 +112,10 @@ class CashProductsListView extends StatelessWidget {
             model: product,
             showAddress: true,
             onClick: () {
-              //数据埋点=>工厂详情页点击“上架产品”进入看款详情
-              UmengPlugin.onEvent('factory_detail_product_click',
-                  properties: {'code': product.code ?? ''});
-            },
+                      //数据埋点=>工厂详情页点击“上架产品”进入看款详情
+                      // UmengPlugin.onEvent('factory_detail_product_click',
+                      // properties: {'code': product.code ?? ''});
+                    },
           ))
           .toList();
 

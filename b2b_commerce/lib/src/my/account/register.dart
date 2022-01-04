@@ -602,7 +602,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (response != null) {
       //注册成功
       //埋点>>>用户注册-成功
-      UmengPlugin.onEvent('user_register_success');
+      // UmengPlugin.onEvent('user_register_success');
 
       Navigator.pushAndRemoveUntil(
         context,
@@ -876,7 +876,7 @@ class _RegisterPageState extends State<RegisterPage> {
           _nameController.text != "") {
         //注册填写
         //埋点>>>用户注册-用户填写过参数
-        UmengPlugin.onEvent('user_register_form_input');
+        // UmengPlugin.onEvent('user_register_form_input');
         setState(() {
           _formEventTracked = true;
         });

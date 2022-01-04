@@ -45,8 +45,8 @@ class _RequirementOrderDetailByFactoryPageState
   @override
   void initState() {
     //埋点>>>需求明细
-    UmengPlugin.onEvent('requirement_detail',
-        properties: {'code': widget.code});
+    // UmengPlugin.onEvent('requirement_detail',
+    //     properties: {'code': widget.code});
     super.initState();
   }
 

@@ -7,9 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.commonsdk.UMConfigure;
-
 import net.nbyjy.b2b.handlers.GlobalChannelMethodCallHandler;
 
 import java.util.HashMap;
@@ -33,13 +30,13 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -47,10 +44,10 @@ public class MainActivity extends FlutterActivity {
         super.onCreate(savedInstanceState);
         Log.d("[nbyjy]", "******OnCreate******");
 //        //友盟初始化
-        UMConfigure.preInit(this, "5e61b75d0cafb2aa19000058", "Umeng");
+//        UMConfigure.preInit(this, "5e61b75d0cafb2aa19000058", "Umeng");
 //        UMConfigure.init(this, "5e61b75d0cafb2aa19000058", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
 //        UMConfigure.setLogEnabled(true);//日志开启
-        com.umeng.umeng_common_sdk.UmengCommonSdkPlugin.setContext(this);
+//        com.umeng.umeng_common_sdk.UmengCommonSdkPlugin.setContext(this);
 
         globalChannelMethodCallHandler = new GlobalChannelMethodCallHandler(MainActivity.this);
         channel = new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), CHANNEL);

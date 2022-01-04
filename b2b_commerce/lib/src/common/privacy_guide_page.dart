@@ -204,7 +204,7 @@ class _PrivacyGuidePageState extends State<PrivacyGuidePage> {
       ..setPrivacyAgreeTime();
 
     //执行友盟初始化
-    UmengPlugin.initCommon();
+    // UmengPlugin.initCommon();
     // Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }

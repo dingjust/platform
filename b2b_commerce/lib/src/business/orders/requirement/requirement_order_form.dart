@@ -38,7 +38,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
   @override
   void initState() {
     //埋点>>>需求发布页面进入
-    UmengPlugin.onEvent('requirement_publish_page');
+    // UmengPlugin.onEvent('requirement_publish_page');
 
     if (widget.formState.factoryUid != null) {
       _factoryUids.add(widget.formState.factoryUid);
@@ -1367,7 +1367,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
     }
     ShowDialogUtil.showChoseDiglog(context, '是否确认发布', () {
       //埋点>>>需求发布2填写并发布
-      UmengPlugin.onEvent('requirement_publish_finsh');
+      // UmengPlugin.onEvent('requirement_publish_finsh');
 
     // BotToast.showCustomText(
     //     onlyOne: true,
@@ -1421,7 +1421,7 @@ class _RequirementOrderFormState extends State<RequirementOrderForm>
           }).then((code) async {
         if (code != null && code != '') {
           //埋点>>>需求发布成功
-          UmengPlugin.onEvent('requirement_publish_success');
+          // UmengPlugin.onEvent('requirement_publish_success');
           widget.formState.model.code = code;
           //根据code查询明
           RequirementOrderModel model = await RequirementOrderRepository()

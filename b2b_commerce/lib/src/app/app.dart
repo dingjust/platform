@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
 
     //友盟初始化
     //页面统计
-    UmengPlugin.setPageCollectionModeManual();
+    // UmengPlugin.setPageCollectionModeManual();
 
     // 预加载全局数据
     AppProvider.preloading(context);

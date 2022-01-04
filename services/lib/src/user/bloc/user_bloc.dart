@@ -137,7 +137,7 @@ class UserBLoC extends BLoCBase {
       //设置JPUSH别名
       jpush$.setAlias(currentUser.mobileNumber);
       //友盟设置用户账号
-      UmengPlugin.onProfileSignIn(_user.mobileNumber);
+      // UmengPlugin.onProfileSignIn(_user.mobileNumber);
 
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
@@ -219,7 +219,7 @@ class UserBLoC extends BLoCBase {
       //设置JPUSH别名
       jpush$.setAlias(currentUser.mobileNumber);
       //友盟设置用户账号
-      UmengPlugin.onProfileSignIn(_user.mobileNumber);
+      // UmengPlugin.onProfileSignIn(_user.mobileNumber);
 
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
@@ -245,7 +245,7 @@ class UserBLoC extends BLoCBase {
     //JPUSH删除别名
     jpush$.deleteAlias();
     //友盟取消用户账号
-    UmengPlugin.onProfileSignOff();
+    // UmengPlugin.onProfileSignOff();
 
     _controller.sink.add(_user);
 
@@ -319,7 +319,7 @@ class UserBLoC extends BLoCBase {
 
         jpush$.setAlias(currentUser.mobileNumber);
         //友盟设置用户账号
-        UmengPlugin.onProfileSignIn(_user.mobileNumber);
+        // UmengPlugin.onProfileSignIn(_user.mobileNumber);
 
         //  记录refresh_token
         LocalStorage.save(

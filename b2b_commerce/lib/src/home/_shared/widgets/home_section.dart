@@ -85,9 +85,9 @@ class BrandHomeEntrance extends StatelessWidget {
                       child: GestureDetector(
                     onTap: () {
                       //埋点>>>推荐工厂
-                      UmengPlugin.onEvent(
-                        'factory_finding_all',
-                      );
+                      // UmengPlugin.onEvent(
+                      //   'factory_finding_all',
+                      // );
 
                       Navigator.push(
                         context,
@@ -343,7 +343,7 @@ class BrandBtnsSection extends StatelessWidget {
                   .toList();
               if (categories != null && labels != null) {
                 //埋点>>>就近找厂
-                UmengPlugin.onEvent('factory_finding_location');
+                // UmengPlugin.onEvent('factory_finding_location');
 
                 Navigator.push(
                   context,
@@ -535,9 +535,9 @@ class HomeBtnsSection extends StatelessWidget {
               label: '推荐工厂',
               onTap: () {
                 //埋点>>>推荐工厂
-                UmengPlugin.onEvent(
-                  'factory_finding_all',
-                );
+                // UmengPlugin.onEvent(
+                //   'factory_finding_all',
+                // );
                 Navigator.push(
                   context,
                   MaterialPageRoute(

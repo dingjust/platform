@@ -25,7 +25,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   @override
   void initState() {
     //埋点>>>我要认证
-    UmengPlugin.onEvent('my_authentication');
+    // UmengPlugin.onEvent('my_authentication');
     //权限预获取
     // PermissionHelper.check();
 

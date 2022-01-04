@@ -44,7 +44,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
   @override
   void initState() {
     //埋点>>>需求发布页面进入
-    UmengPlugin.onEvent('requirement_publish_page');
+    // UmengPlugin.onEvent('requirement_publish_page');
 
     super.initForm();
     super.initCreate(widget.formState.model);
@@ -1036,7 +1036,7 @@ class _RequirementFormFactoryState extends State<RequirementFormFactory>
       if (response != null && response.code == 1) {
         BotToast.showText(text: '创建成功');
         //埋点>>>需求发布成功
-        UmengPlugin.onEvent('requirement_publish_success');
+        // UmengPlugin.onEvent('requirement_publish_success');
         //根据code查询明
         RequirementOrderModel model = await RequirementOrderRepository()
             .getRequirementOrderDetail(response.msg);

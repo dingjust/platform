@@ -506,9 +506,9 @@ class _RegisterPageV2State extends State<RegisterPageV2> {
     if (response != null) {
       //注册成功
       //埋点>>>用户注册-成功
-      UmengPlugin.onEvent(
-        'user_register_success',
-      );
+      // UmengPlugin.onEvent(
+      //   'user_register_success',
+      // );
 
       //授权码登录
       UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
@@ -779,7 +779,7 @@ class _RegisterPageV2State extends State<RegisterPageV2> {
           _nameController.text != "") {
         //注册填写
         //埋点>>>用户注册-用户填写过参数
-        UmengPlugin.onEvent('user_register_form_input');
+        // UmengPlugin.onEvent('user_register_form_input');
         setState(() {
           _formEventTracked = true;
         });

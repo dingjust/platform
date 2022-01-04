@@ -49,7 +49,7 @@ dependencies:
   location_permissions: ^2.0.3
   flutter_alipay: ^0.1.2
   bot_toast: ^3.0.4
-  umeng_common_sdk: ^1.1.2
+  # umeng_common_sdk: ^1.1.2
 
 
 

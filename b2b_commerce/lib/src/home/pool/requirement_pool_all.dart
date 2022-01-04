@@ -87,8 +87,8 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
     }
 
     //埋点>>>需求中心
-    UmengPlugin.onEvent('requirement_center');
-    UmengPlugin.onPageStart('全部需求');
+    // UmengPlugin.onEvent('requirement_center');
+    // UmengPlugin.onPageStart('全部需求');
     super.initState();
   }
 
@@ -278,7 +278,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 
   @override
   void dispose() {
-    UmengPlugin.onPageEnd('全部需求');
+    // UmengPlugin.onPageEnd('全部需求');
     super.dispose();
   }
 }

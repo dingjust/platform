@@ -99,7 +99,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
   @override
   void initState() {
     //页面统计
-    UmengPlugin.onPageStart('生产找厂');
+    // UmengPlugin.onPageStart('生产找厂');
 
     factoryCondition = FactoryCondition(
         starLevel: 0, adeptAtCategories: [], labels: [], cooperationModes: []);
@@ -118,7 +118,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
     //注意这里关闭
     AMapLocationClient.shutdown();
     //页面统计
-    UmengPlugin.onPageEnd('生产找厂');
+    // UmengPlugin.onPageEnd('生产找厂');
     super.dispose();
   }
 

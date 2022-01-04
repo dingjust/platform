@@ -39,9 +39,9 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
   @override
   void initState() {
     //埋点>>>空闲产能
-    UmengPlugin.onEvent(
-      'capacity_matching',
-    );
+    // UmengPlugin.onEvent(
+    //   'capacity_matching',
+    // );
     super.initState();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => checkLoginStatus(context));

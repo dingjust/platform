@@ -21,9 +21,9 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => checkLoginStatus());
     //埋点>>>进入发布中心
-    UmengPlugin.onEvent(
-      "publish_center",
-    );
+    // UmengPlugin.onEvent(
+    //   "publish_center",
+    // );
   }
 
   @override
